@@ -1,5 +1,26 @@
 import random
 
+def BFS(graph, origin, destiny):
+    frontier = [[origin]]
+    visited = []
+
+    while frontier:
+        path = frontier.pop(-1)
+
+        if path[-1] == destiny:
+            return path
+        
+        for v in graph[origin]:
+            if not v in visited:
+                frontier.append(path + [v])
+                visited.append(v)
+    
+    return None
+
+# def method_one(graph):
+
+
+
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
     min = int(v)
@@ -17,10 +38,7 @@ def createRandomGraph(v):
                 graph[destiny].append(origin)
                 flag += 1
     
-    return graph
-
-
-    
+    return graph 
 
 if __name__ == '__main__':
     v = 40
