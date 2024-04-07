@@ -21,6 +21,64 @@ def BFS(graph, origin, destiny):
 
 
 
+def initializing_depth_first_search(graph:list[list[int]], visited:list[int] ,vertex:int) -> None:
+    ''' 
+        This function has a purpose to find articulation points in a Graph and test their connectivity after the removal of each vertex
+
+        Parameters:
+            graph = This parameter is a list that contain each adjacency list of each vertex in a graph.
+
+        Return: 
+            articulations = return the vertex that are articulations, which means, a vertex that if it will be removed the graph pass to be disconnected 
+    '''
+    time = 0
+    ## for all vertex inside the graph discovery time and finish time is 0
+    list_of_discovery_time = []
+    list_of_fathers = []
+    list_of_end_time = []
+    
+    while len(list_of_discovery_time) != len(graph):
+        
+        
+        depth_first_search(0,time,list_of_discovery_time,list_of_end_time,list_of_fathers,graph)    
+        
+        # if vertex not in visited:
+        #     visited.append(vertex)
+        #     for neighbour in graph[vertex]:
+        #         depth_first_search(graph,visited,neighbour)
+
+
+def depth_first_search(vertex:int, time:int, discovery_time:list, end_time:list, fathers:list, graph: list[list[int]])->None:
+    time += 1
+    discovery_time[vertex] = time
+    for parents in graph[vertex]:
+        if discovery_time[parents]==0:
+            fathers[parents] = vertex
+            depth_first_search(parents,time,discovery_time,end_time,fathers,graph)
+        elif end_time[parents]==0 and parents!=fathers[vertex]:
+                n
+    time +=1
+    end_time[vertex] = time
+
+        
+
+def finding_articulations_in_graph(graph :list) ->list[int]:
+    ''' 
+        This function has a purpose to find articulation points in a Graph and teste their connectivity after the removal of each vertex
+
+        Parameters:
+            graph = This parameter is a list that contain each adjacency list of each vertex in a graph.
+
+        Return: 
+            articulations = return the vertex that are articulations, which means, a vertex that if it will be removed the graph pass to be desconexed 
+     
+    '''
+    articulations = []
+
+
+
+    return articulations
+
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
     min = int(v)
@@ -41,8 +99,9 @@ def createRandomGraph(v):
     return graph 
 
 if __name__ == '__main__':
-    v = 40
+    v = 10
     graph = createRandomGraph(v)
+
 
     for a in graph:
         if len(a) == 0:
