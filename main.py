@@ -1,5 +1,19 @@
 import random
 
+def testGraph():
+    return [[1, 2],
+            [0, 2, 3],
+            [0, 1, 4, 5],
+            [1, 6, 7],
+            [2, 5, 8],
+            [2, 4, 8],
+            [3, 7, 9],
+            [3, 6, 10],
+            [4, 5],
+            [6, 10],
+            [7, 9]
+        ]
+
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
     min = int(v)
@@ -55,48 +69,46 @@ def DFS(graph):
         TT.append(0)
         father.append(None)
     
-    while 0 in TD:
-        index = TD.index(0)
-        DFS_(graph, index, TD, TT, father, t)
+    for i in range(len(graph)):
+        if TD[i] == 0:
+            DFS_(graph, i, TD, TT, father, t)
     
     return father, TD, TT
 
+def findCycle(graph, TD, TT, start, node):
+    for n in graph[node]:
+        print(n)
+        if TD[n] <= TD[start] and TT[n] >= TT[start]:
+            print(node, "->", n)
+            print(TD[start], "->", TD[n])
+            print(TT[start], "->", TT[n])
+            return True
+        if TD[node] == TD[n] + 1:
+            findCycle(graph, TD, TT, start, n)
 
-def DFS_search(graph, origin, destiny):
-    frontier = [[origin]]
-    visited = []
+    return False
 
-    while frontier:
-        path = frontier.pop(-1)
+def hasCicle(graph, TD, TT, node1, node2):
+    if TD[node1] < TD[node1]:
+        start = node1
+        destiny = node2
+    else:
+        start = node2
+        destiny = node1
 
-        if path[-1] == destiny:
-            return path
-        
-        for v in graph[origin]:
-            if not v in visited:
-                frontier.append(path + [v])
-                visited.append(v)
-    
-    return None
+    print("start: ", start)
+    print("destiny: ", destiny)
 
-def method_one(graph):
-    groups = []
-
-    nodes_found = [False for v in graph]
-
-    while False in nodes_found:
-        node = nodes_found.index(False)
-
-        cut = [node]
-        for n in graph[node]:
-            if len(cut) < 2:
-                cut.append(n)
-            else:
-                path = DFS_search(graph, node, n)
-
-
-
+    return findCycle(graph, TD, TT, start, destiny)
     
 if __name__ == '__main__':
-    v = 40
+    v = 500
     graph = createRandomGraph(v)
+    father, TD, TT = DFS(graph)
+    for v in range(len(graph)):
+        print(TD[v], "->", TT[v])
+
+    # if hasCicle(graph, TD, TT, 6, 2):
+    #     print("ACHOU")
+    # else:
+    #     print("nao achou")
