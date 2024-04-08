@@ -83,7 +83,7 @@ def findCycle(graph, TD, TT, start, node):
     for n in graph[node]:
         if TD[n] <= TD[start] and TT[n] >= TT[start]:
             return True
-        if TD[node] == TD[n] + 1:
+        if TD[node] < TD[n]:
             findCycle(graph, TD, TT, start, n)
 
     return False
