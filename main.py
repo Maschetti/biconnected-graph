@@ -36,36 +36,16 @@ def initializing_depth_first_search(graph:list[list[int]],list_of_discovery_time
             articulations = return the vertex that are articulations, which means,
             a vertex that if it will be removed the graph pass to be disconnected 
     '''
-    time = 0
-    ## for all vertex inside the graph discovery time and finish time is 0
-    list_of_discovery_time = []
-    list_of_fathers = []
-    list_of_end_time = []
-    
-    while len(list_of_discovery_time) != len(graph):
+    for vertex in range(len(graph)):
+        list_of_discovery_time[vertex]=-1
+    for vertex in range(len(graph)):
+        if list_of_discovery_time[vertex] == -1:
+            list_of_fathers[vertex] = vertex
+            depth_first_search(graph,vertex,list_of_discovery_time,
+                               list_of_end_time,list_of_fathers,time,time_of_death)
         
-        
-        depth_first_search(0,time,list_of_discovery_time,list_of_end_time,list_of_fathers,graph)    
-        
-        # if vertex not in visited:
-        #     visited.append(vertex)
-        #     for neighbour in graph[vertex]:
-        #         depth_first_search(graph,visited,neighbour)
+    return list_of_discovery_time,list_of_end_time,list_of_fathers
 
-
-def depth_first_search(vertex:int, time:int, discovery_time:list, end_time:list, fathers:list, graph: list[list[int]])->None:
-    time += 1
-    discovery_time[vertex] = time
-    for parents in graph[vertex]:
-        if discovery_time[parents]==0:
-            fathers[parents] = vertex
-            depth_first_search(parents,time,discovery_time,end_time,fathers,graph)
-        elif end_time[parents]==0 and parents!=fathers[vertex]:
-                n
-    time +=1
-    end_time[vertex] = time
-
-        
 
 def finding_articulations_in_graph(graph :list) ->list[int]:
     ''' 
