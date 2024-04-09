@@ -46,6 +46,23 @@ def initializing_depth_first_search(graph:list[list[int]],list_of_discovery_time
         
     return list_of_discovery_time,list_of_end_time,list_of_fathers
 
+def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:list,
+                       list_of_end_time:list,list_of_fathers:list,time:int,
+                       time_of_death:int) -> tuple[list,list,list]:
+    
+    time+=1
+    list_of_discovery_time[vertex] = time
+    
+    for adjacent in graph[vertex]:
+        if list_of_discovery_time[vertex]==-1:
+            list_of_fathers[adjacent] = vertex
+            depth_first_search(graph,adjacent, list_of_discovery_time,
+                               list_of_end_time,list_of_fathers,time,time_of_death)
+    time_of_death+=1
+    list_of_end_time[vertex] = time_of_death
+
+    return  list_of_discovery_time,list_of_end_time,list_of_fathers
+
 
 def finding_articulations_in_graph(graph :list) ->list[int]:
     ''' 
