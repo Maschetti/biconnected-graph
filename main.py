@@ -21,15 +21,20 @@ def BFS(graph, origin, destiny):
 
 
 
-def initializing_depth_first_search(graph:list[list[int]], visited:list[int] ,vertex:int) -> None:
+def initializing_depth_first_search(graph:list[list[int]],list_of_discovery_time:list,
+                                    list_of_end_time:list,list_of_fathers:list,time:int,
+                                    time_of_death:int) -> tuple[list,list,list]:
     ''' 
-        This function has a purpose to find articulation points in a Graph and test their connectivity after the removal of each vertex
+        This function has a purpose to find articulation points in a Graph and test 
+        their connectivity after the removal of each vertex
 
         Parameters:
-            graph = This parameter is a list that contain each adjacency list of each vertex in a graph.
+            graph = This parameter is a list that contain each adjacency list of each
+            vertex in a graph.
 
         Return: 
-            articulations = return the vertex that are articulations, which means, a vertex that if it will be removed the graph pass to be disconnected 
+            articulations = return the vertex that are articulations, which means,
+            a vertex that if it will be removed the graph pass to be disconnected 
     '''
     time = 0
     ## for all vertex inside the graph discovery time and finish time is 0
