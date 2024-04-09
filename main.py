@@ -102,10 +102,18 @@ def createRandomGraph(v):
     
     return graph 
 
-if __name__ == '__main__':
-    v = 10
-    graph = createRandomGraph(v)
 
+
+    
+if __name__ == '__main__':
+    NUMBER_OF_VERTEX = 10
+    graph = createRandomGraph(NUMBER_OF_VERTEX)
+    TIME = 0
+    TIME_OF_DEATH = 0
+    ## for all vertex inside the graph discovery time and finish time is 0
+    list_of_discovery_time = [int]
+    list_of_fathers = [int]
+    list_of_end_time = [int]
 
     for a in graph:
         if len(a) == 0:
