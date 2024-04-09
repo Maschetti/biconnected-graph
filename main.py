@@ -1,5 +1,7 @@
 import random
 
+
+
 def BFS(graph, origin, destiny):
     frontier = [[origin]]
     visited = []
