@@ -66,14 +66,16 @@ def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:
 
 def finding_articulations_in_graph(graph :list) ->list[int]:
     ''' 
-        This function has a purpose to find articulation points in a Graph and teste their connectivity after the removal of each vertex
+        This function has a purpose to find articulation points in a Graph and
+        test their connectivity after the removal of each vertex
 
         Parameters:
-            graph = This parameter is a list that contain each adjacency list of each vertex in a graph.
+            graph = This parameter is a list that contain each adjacency list 
+            of each vertex in a graph.
 
         Return: 
-            articulations = return the vertex that are articulations, which means, a vertex that if it will be removed the graph pass to be desconexed 
-     
+            articulations = return the vertex that are articulations, which means,
+            a vertex that if it will be removed the graph pass to be desconexed 
     '''
     articulations = []
 
