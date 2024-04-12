@@ -1,6 +1,5 @@
 import random
-
-
+from typing import Union
 
 def BFS(graph, origin, destiny):
     frontier = [[origin]]
