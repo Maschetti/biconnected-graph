@@ -166,3 +166,6 @@ if __name__ == '__main__':
     
     
     
+    # for a in graph:
+    #     if len(a) == 0:
+    #         print("Grafo desconexo")
