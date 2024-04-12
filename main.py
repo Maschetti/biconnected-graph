@@ -145,15 +145,24 @@ def createRandomGraph(v):
 
     
 if __name__ == '__main__':
-    NUMBER_OF_VERTEX = 10
+    NUMBER_OF_VERTEX = 7
     graph = createRandomGraph(NUMBER_OF_VERTEX)
-    TIME = 0
-    TIME_OF_DEATH = 0
+    time = 0
+    time_of_death = 0
     ## for all vertex inside the graph discovery time and finish time is 0
-    list_of_discovery_time = [int]
-    list_of_fathers = [int]
-    list_of_end_time = [int]
+    list_of_discovery_time = [[] for _ in range(NUMBER_OF_VERTEX)]
+    list_of_fathers = [[] for _ in range(NUMBER_OF_VERTEX)]
+    list_of_end_time = [[] for _ in range(NUMBER_OF_VERTEX)]
+    lowest_preorder_number = [[] for _ in range(NUMBER_OF_VERTEX)]
 
-    for a in graph:
-        if len(a) == 0:
-            print("Grafo desconexo")
+    discovery,end,fathers = initializing_depth_first_search(graph,list_of_discovery_time,list_of_end_time,
+                                                            list_of_fathers,time,time_of_death)
+    print(f'List of discovery time of each vertex:\n {discovery}\n')
+    print(f'List of end time of each vertex:\n{end}\n')
+    print(f'List of fathers of each vertex:\n{fathers}\n')
+    
+    articulations = finding_articulations_in_graph(graph,end,discovery,fathers,lowest_preorder_number)
+    print(articulations)
+    
+    
+    
