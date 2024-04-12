@@ -64,8 +64,19 @@ def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:
 
     return  list_of_discovery_time,list_of_end_time,list_of_fathers
 
+def min_between_two_values(value1:int,value2:int)->int:
+    """
+    This methods return the minimum between two values
+    
+    Parameters: 
+        value1: integer to be compared 
+        value2: integer to be compared 
+    
+    Return:
+        the minimum value
+    """    
+    return value1 if value1<value2 else value2
 
-def finding_articulations_in_graph(graph :list) ->list[int]:
     ''' 
         This function has a purpose to find articulation points in a Graph and
         test their connectivity after the removal of each vertex
