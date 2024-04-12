@@ -51,8 +51,7 @@ def createRandomGraph(v):
     graph = [[] for _ in range(v)]
     min = int(v)
     max = int((v * (v - 1)) / 2)
-    number_edges = random.randint(min, max + 1)
-    number_edges = 40
+    number_edges = random.randint(min, max + 1) * 0.2
 
     flag = 0
 
@@ -60,7 +59,7 @@ def createRandomGraph(v):
         origin = random.randrange(0, v)
         destiny = random.randrange(0, v)
 
-        if origin is not destiny:
+        if origin != destiny:
             if destiny not in graph[origin]:
                 graph[origin].append(destiny)
                 graph[destiny].append(origin)
@@ -79,31 +78,63 @@ def createRandomGraph(v):
 
     return graph 
 
-def findCycle(graph, TD, TT, start, node):
-    for n in graph[node]:
-        if TD[n] <= TD[start] and TT[n] >= TT[start]:
-            return True
-        if TD[node] < TD[n]:
-            findCycle(graph, TD, TT, start, n)
+def filter_subsets(list_of_lists):
+    result = []
 
-    return False
+    while list_of_lists:
+        sub = list_of_lists.pop(0)
 
-def hasCicle(graph, TD, TT, node1, node2):
-    if TD[node1] < TD[node2]:
-        start = node1
-        destiny = node2
-    else:
-        start = node2
-        destiny = node1
+        isSub = False
+        for l in list_of_lists:
+            if set(sub).issubset(set(l)):
+                isSub = True
+                break
+        
+        for r in result:
+            if set(sub).issubset(set(r)):
+                isSub = True
+                break
 
-    return findCycle(graph, TD, TT, start, destiny)
+        if not isSub:
+            result.append(sub)
+    return result
+
+def dfs(graph, start, node, visited, path, cycles):
+    visited[node] = True
+    path.append(node)
     
-if __name__ == '__main__':
-    v = 500
-    graph = testGraph()
-    father, TD, TT = DFS(graph)
+    for neighbor in graph[node]:
+        if neighbor == start:
+            cycle = sorted(path)
 
-    if hasCicle(graph, TD, TT, 0, 7):
-        print("ACHOU")
-    else:
-        print("nao achou")
+            if cycle not in cycles:
+                cycles.append(cycle)
+        elif not visited[neighbor]:
+            dfs(graph, start, neighbor, visited, path, cycles)
+            print("saiu")
+    
+    path.pop()
+    visited[node] = False
+
+def find_cycles(graph):
+    cycles = []
+    for node in range(len(graph)):
+        visited = [False for node in graph]
+        dfs(graph, node, node, visited, [], cycles)
+        print("saiu")
+    
+    print("saiu")
+    input()
+    cycles = filter_subsets(cycles)
+    print("saiu")
+    
+    return cycles
+
+if __name__ == '__main__':
+    v = 50
+    graph = createRandomGraph(v)
+    
+    print(find_cycles(graph))
+
+
+    
