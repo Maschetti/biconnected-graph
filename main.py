@@ -55,12 +55,12 @@ def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:
     list_of_discovery_time[vertex] = time
     
     for adjacent in graph[vertex]:
-        if list_of_discovery_time[vertex]==-1:
+        if list_of_discovery_time[adjacent]==-1:
             list_of_fathers[adjacent] = vertex
             depth_first_search(graph,adjacent, list_of_discovery_time,
                                list_of_end_time,list_of_fathers,time,time_of_death)
-    time_of_death+=1
-    list_of_end_time[vertex] = time_of_death
+        time_of_death+=1
+        list_of_end_time[vertex] = time_of_death
 
     return  list_of_discovery_time,list_of_end_time,list_of_fathers
 
