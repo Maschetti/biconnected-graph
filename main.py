@@ -27,17 +27,29 @@ def initializing_depth_first_search(graph:list[list[int]]) -> None:
             depth_first_search(graph,vertex)
         
 
+def depth_first_search(graph: list[list[int]],vertex:int) -> None:
+    ''' 
+        Performing the depth first search in graph building the 
+        vectors of pre order, post order and fathers.
+        
+
+        Parameters:
+            graph : This parameter is a list that contain each adjacency list 
+            of each vertex in a graph.
+    '''   
+    global time,time_of_death
+    
     list_of_discovery_time[vertex] = time
+    time+=1
     
     for adjacent in graph[vertex]:
         if list_of_discovery_time[adjacent]==-1:
-            list_of_fathers[adjacent] = vertex
-            depth_first_search(graph,adjacent, list_of_discovery_time,
-                               list_of_end_time,list_of_fathers,time,time_of_death)
-        time_of_death+=1
-        list_of_end_time[vertex] = time_of_death
-
-    return  list_of_discovery_time,list_of_end_time,list_of_fathers
+                list_of_fathers[adjacent] = vertex
+                depth_first_search(graph,adjacent)
+    
+    list_of_end_time[vertex] = time_of_death
+    time_of_death+=1
+    
 
 def min_between_two_values(value1:int,value2:int)->int:
     """
