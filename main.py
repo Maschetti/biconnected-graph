@@ -74,6 +74,8 @@ def finding_articulations_in_graph(graph:list[list[int]]) -> None:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
     '''    
+    initializing_depth_first_search(graph)
+
     list_of_the_first_to_die =  [[] for _ in range(len(graph))]
     
     for vertex in range(len(graph)):
@@ -95,7 +97,24 @@ def finding_articulations_in_graph(graph:list[list[int]]) -> None:
                         lowest_preorder_number[vertex_that_died_firts])
     
     
-
+def determine_if_graph_is_biconnected(graph:list[list[int]]) -> bool:
+    
+    finding_articulations_in_graph(graph)
+    
+    for vertex in range(len(graph)):
+        if ((lowest_preorder_number[vertex]==list_of_discovery_time[vertex])
+            and (list_of_fathers[vertex]!=vertex)):
+            return False
+    
+    roots = 0
+    for vertex in range(len(graph)):
+        if list_of_fathers[vertex]==vertex: roots+=1
+        if roots>1:
+            return False
+    
+    return True 
+    
+    
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
     min = int(v)
@@ -137,15 +156,16 @@ if __name__ == '__main__':
         # post[v] 10 0  9  8  5  3  2   1  7  4  6
         # lo[v]   0  4  0  0  5  8  8   5  1  8  5
         
-    initializing_depth_first_search(graph)
+    #initializing_depth_first_search(graph)
+
+    
+    #finding_articulations_in_graph(graph)  
+
+    print(f'Graph is biconnected or not?\n {determine_if_graph_is_biconnected(graph)}\n')
     print(f'List of discovery time of each vertex:\n {list_of_discovery_time}\n')
     print(f'List of end time of each vertex:\n{list_of_end_time}\n')
-    #print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
-    
-    finding_articulations_in_graph(graph)  
+    print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
     print(f'List of lowest pre order number:\n{lowest_preorder_number}\n')
-    
-    
     
     # for a in graph:
     #     if len(a) == 0:
