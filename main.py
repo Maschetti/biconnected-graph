@@ -1,4 +1,5 @@
 import random
+import networkx as nx
 
 def testGraph():
     return [[1, 2],
@@ -46,6 +47,25 @@ def DFS(graph):
             DFS_(graph, i, TD, TT, father, t)
     
     return father, TD, TT
+
+def random_graph_generator(v):
+    graph = nx.random_tree(v)
+
+    number_edges = random.randint(0, v * (v - 1) // 2 - v * 0.3)
+
+    for _ in range(number_edges):
+        # Choose a random edge from the existing graph
+        edge = random.choice(list(graph.edges()))
+        
+        # Choose a random node not in the current edge
+        new_node = random.choice([node for node in range(v) if node not in edge])
+        
+        # Add the new edge to the graph
+        graph.add_edge(edge[0], new_node)
+
+    # Return the adjacency list representation of the graph
+    return [node for node, edges in enumerate(graph)]
+
 
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
@@ -111,7 +131,6 @@ def dfs(graph, start, node, visited, path, cycles):
                 cycles.append(cycle)
         elif not visited[neighbor]:
             dfs(graph, start, neighbor, visited, path, cycles)
-            print("saiu")
     
     path.pop()
     visited[node] = False
@@ -121,20 +140,17 @@ def find_cycles(graph):
     for node in range(len(graph)):
         visited = [False for node in graph]
         dfs(graph, node, node, visited, [], cycles)
-        print("saiu")
     
-    print("saiu")
-    input()
     cycles = filter_subsets(cycles)
-    print("saiu")
     
     return cycles
 
 if __name__ == '__main__':
     v = 50
-    graph = createRandomGraph(v)
+    graph = random_graph_generator(v)
+    print(graph)
     
-    print(find_cycles(graph))
+    # print(find_cycles(graph))
 
 
     
