@@ -74,25 +74,25 @@ def finding_articulations_in_graph(graph:list[list[int]]) -> None:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
     '''    
-    list_of_the_first_vertex_to_death =  [[0] for _ in range(len(graph))]
+    list_of_the_first_to_die =  [[] for _ in range(len(graph))]
     
     for vertex in range(len(graph)):
-        list_of_the_first_vertex_to_death[list_of_end_time[vertex]] = vertex
+        list_of_the_first_to_die[list_of_end_time[vertex]] = vertex
     
     for vertex in range(len(graph)):
         
-        first_vertex_to_death = list_of_the_first_vertex_to_death[vertex]
-        lowest_preorder_number[first_vertex_to_death] = list_of_discovery_time[first_vertex_to_death]
+        vertex_that_died_firts = list_of_the_first_to_die[vertex]
+        lowest_preorder_number[vertex_that_died_firts] = list_of_discovery_time[vertex_that_died_firts]
         
-        for adjacent in graph[first_vertex_to_death]:
-            if list_of_discovery_time[adjacent]<list_of_discovery_time[first_vertex_to_death]:
-                if ( adjacent!=list_of_fathers[first_vertex_to_death]):
-                    lowest_preorder_number[first_vertex_to_death] = min_between_two_values(list_of_discovery_time[adjacent],
-                        lowest_preorder_number[first_vertex_to_death])
-                else:
-                    if list_of_fathers[adjacent]==first_vertex_to_death:
-                        lowest_preorder_number[first_vertex_to_death] = min_between_two_values(lowest_preorder_number[adjacent],
-                            lowest_preorder_number[first_vertex_to_death])
+        for adjacent in graph[vertex_that_died_firts]:
+            if list_of_discovery_time[adjacent]<list_of_discovery_time[vertex_that_died_firts]:
+                if ( adjacent!=list_of_fathers[vertex_that_died_firts]):
+                    lowest_preorder_number[vertex_that_died_firts] = min_between_two_values(list_of_discovery_time[adjacent],
+                        lowest_preorder_number[vertex_that_died_firts])
+            else:
+                if list_of_fathers[adjacent]==vertex_that_died_firts:
+                    lowest_preorder_number[vertex_that_died_firts] = min_between_two_values(lowest_preorder_number[adjacent],
+                        lowest_preorder_number[vertex_that_died_firts])
     
     
 
