@@ -67,8 +67,7 @@ def min_between_two_values(value1:int,value2:int)->int:
 
 def finding_articulations_in_graph(graph:list[list[int]]) -> None:
     ''' 
-        This function has a purpose to find articulation points in a Graph and
-        test their connectivity after the removal of each vertex
+        This function has a purpose to find bridges in a Graph
 
         Parameters:
             graph : This parameter is a list that contain each adjacency list 
@@ -99,6 +98,13 @@ def finding_articulations_in_graph(graph:list[list[int]]) -> None:
     
 def determine_if_graph_is_biconnected(graph:list[list[int]]) -> bool:
     
+    ''' 
+        This function has a purpose to determine if a graph is edge biconnected or not using Tarjan's Algorithm
+
+        Parameters:
+            graph : This parameter is a list that contain each adjacency list 
+            of each vertex in a graph.
+    '''    
     finding_articulations_in_graph(graph)
     
     for vertex in range(len(graph)):
