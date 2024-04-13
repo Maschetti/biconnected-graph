@@ -10,36 +10,23 @@ time = 0
 time_of_death = 0
 
 
-def initializing_depth_first_search(graph:list[list[int]],list_of_discovery_time:list,
-                                    list_of_end_time:list,list_of_fathers:list,time:int,
-                                    time_of_death:int) -> tuple[list,list,list]:
+def initializing_depth_first_search(graph:list[list[int]]) -> None:
     ''' 
-        This function has a purpose to find articulation points in a Graph and test 
-        their connectivity after the removal of each vertex
+        This function has a purpose to find initializing the depth first search
+        in a graph
 
         Parameters:
             graph = This parameter is a list that contain each adjacency list of each
-            vertex in a graph.
-
-        Return: 
-            articulations = return the vertex that are articulations, which means,
-            a vertex that if it will be removed the graph pass to be disconnected 
+            vertex in a graph. 
     '''
     for vertex in range(len(graph)):
         list_of_discovery_time[vertex]=-1
     for vertex in range(len(graph)):
         if list_of_discovery_time[vertex] == -1:
             list_of_fathers[vertex] = vertex
-            depth_first_search(graph,vertex,list_of_discovery_time,
-                               list_of_end_time,list_of_fathers,time,time_of_death)
+            depth_first_search(graph,vertex)
         
-    return list_of_discovery_time,list_of_end_time,list_of_fathers
 
-def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:list,
-                       list_of_end_time:list,list_of_fathers:list,time:int,
-                       time_of_death:int) -> tuple[list,list,list]:
-    
-    time+=1
     list_of_discovery_time[vertex] = time
     
     for adjacent in graph[vertex]:
