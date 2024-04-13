@@ -1,11 +1,12 @@
 import random
+from typing import Tuple
 
-NUMBER_OF_VERTEX = 7
+NUMBER_OF_VERTEX = 11
 list_of_discovery_time = [[] for _ in range(NUMBER_OF_VERTEX)]
 list_of_fathers = [[] for _ in range(NUMBER_OF_VERTEX)]
 list_of_end_time = [[] for _ in range(NUMBER_OF_VERTEX)]
 lowest_preorder_number = [[] for _ in range(NUMBER_OF_VERTEX)]
-
+connected_components = [[] for _ in range(NUMBER_OF_VERTEX)]
 time = 0
 time_of_death = 0
 
