@@ -64,8 +64,8 @@ def min_between_two_values(value1:int,value2:int)->int:
     """    
     return value1 if value1<value2 else value2
 
-def finding_articulations_in_graph(graph:list, end_list:list, discovery_list:list,
-                                   father_list:list, lowest_pre_order_number:list) ->Union[list[int],None]:
+
+def finding_articulations_in_graph(graph:list[list[int]]) -> None:
     ''' 
         This function has a purpose to find articulation points in a Graph and
         test their connectivity after the removal of each vertex
@@ -73,41 +73,27 @@ def finding_articulations_in_graph(graph:list, end_list:list, discovery_list:lis
         Parameters:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
-            end_list : List of end time built in depth_first_search method
-            discovery_list : List of discovery time built in depth_first_search method
-            father_list : List of father of each vertex built in depth_first_search method
-            lowest_pre_order_number : List to accommodate the lower pre_order number of each vertex
-
-        Return: 
-            articulations : return the vertex that are articulations, which means,
-            a vertex that if it will be removed the graph pass to be disconnected 
-            None : return None in len(articulations) = 0
     '''
-    articulations_local = []
     end_time_sorted =  [[] for _ in range(len(graph))]
     
     for vertex in range(len(graph)):
-        end_time_sorted[end_list[vertex]] = vertex
+        end_time_sorted[list_of_end_time[vertex]] = vertex
     
     for vertex in range(len(graph)):
         vertex_auxiliary = end_time_sorted[vertex]
-        lowest_pre_order_number[vertex_auxiliary] = discovery_list[vertex_auxiliary]
+        lowest_preorder_number[vertex_auxiliary] = list_of_discovery_time[vertex_auxiliary]
         for adjacent in graph[vertex_auxiliary]:
-            if discovery_list[adjacent]<discovery_list[vertex_auxiliary]:
-                if ( adjacent!=father_list[vertex_auxiliary]):
-                    lowest_pre_order_number[vertex_auxiliary] = min_between_two_values(
-                        lowest_pre_order_number[vertex_auxiliary],discovery_list[adjacent])
+            if list_of_discovery_time[adjacent]<list_of_discovery_time[vertex_auxiliary]:
+                if ( adjacent!=list_of_fathers[vertex_auxiliary]):
+                    lowest_preorder_number[vertex_auxiliary] = min_between_two_values(
+                        lowest_preorder_number[vertex_auxiliary],list_of_discovery_time[adjacent])
                 else:
-                    if father_list[adjacent]==vertex_auxiliary:
-                        lowest_pre_order_number[vertex_auxiliary] = min_between_two_values(
-                            lowest_pre_order_number[vertex_auxiliary],
-                            lowest_pre_order_number[adjacent])
+                    if list_of_fathers[adjacent]==vertex_auxiliary:
+                        lowest_preorder_number[vertex_auxiliary] = min_between_two_values(
+                            lowest_preorder_number[vertex_auxiliary],
+                            lowest_preorder_number[adjacent])
     
-    for index, (preoder,lowest_preorder) in enumerate(zip(discovery_list,lowest_pre_order_number)):
-        if preoder==lowest_preorder:
-            articulations_local.append(index)
     
-    return articulations_local if len(articulations_local)!=0 else None
 
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
