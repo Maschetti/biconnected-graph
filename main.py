@@ -55,6 +55,45 @@ def remove_vertex_and_return_new_graph(graph: list[list[int]],vertex:int) -> lis
     return new_graph
 
 
+def number_of_connected_components(graph:list[list[int]]) -> int:
+    """ 
+        Make a depth_first_search in a graph and capture the vector of fathers
+        
+        Parameters: 
+            graph: the graph to perform the search
+            start: the root of the search
+        
+        Return:
+            The number of connected components
+    """    
+
+    fathers = [-1 for _ in range(len(graph))]
+    discovery = [-1 for _ in range(len(graph))]
+    time2=0
+
+    def dfs_recursive(graph, vertex,time2):
+        
+        time2+=1
+        
+        discovery[vertex] = time2
+        
+        for adjacent in graph[vertex]:
+            if discovery[adjacent]==-1:
+                    fathers[adjacent] = vertex
+                    depth_first_search(graph,adjacent)
+                    
+    for vertex in range(len(graph)):
+        if discovery[vertex] == -1:
+            dfs_recursive(graph,vertex,time2)
+            
+    number_of_components = len(find_matching_positions(fathers))
+
+
+    return number_of_components
+
+            
+
+
 def initializing_depth_first_search(graph:list[list[int]]) -> None:
     ''' 
         This function has a purpose to find initializing the depth first search
