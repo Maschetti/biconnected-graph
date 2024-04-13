@@ -1,25 +1,13 @@
 import random
-from typing import Union
 
-def BFS(graph, origin, destiny):
-    frontier = [[origin]]
-    visited = []
+NUMBER_OF_VERTEX = 7
+list_of_discovery_time = [[] for _ in range(NUMBER_OF_VERTEX)]
+list_of_fathers = [[] for _ in range(NUMBER_OF_VERTEX)]
+list_of_end_time = [[] for _ in range(NUMBER_OF_VERTEX)]
+lowest_preorder_number = [[] for _ in range(NUMBER_OF_VERTEX)]
 
-    while frontier:
-        path = frontier.pop(-1)
-
-        if path[-1] == destiny:
-            return path
-        
-        for v in graph[origin]:
-            if not v in visited:
-                frontier.append(path + [v])
-                visited.append(v)
-    
-    return None
-
-# def method_one(graph):
-
+time = 0
+time_of_death = 0
 
 
 def initializing_depth_first_search(graph:list[list[int]],list_of_discovery_time:list,
