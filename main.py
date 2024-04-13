@@ -15,24 +15,31 @@ def testGraph():
             [7, 9]
         ]
 
-def visit_edge(origin, destiny):
+def visit_edge(origin, destiny, cycles, father):
+    new_cycle = [origin]
+    while origin != destiny:
+        new_cycle.append(father[origin])
+        origin = father[origin]
+
+    cycles.append(new_cycle)
     return None
 
-def DFS_(graph, node, TD, TT, father, t):
+def DFS_(graph, node, TD, TT, father, t, cycles):
     t[0] += 1
     TD[node] = t[0]
 
     for v in graph[node]:
         if TD[v] == 0:
             father[v] = node
-            DFS_(graph, v, TD, TT, father, t)
+            DFS_(graph, v, TD, TT, father, t, cycles)
         elif (TT[v] == 0) and father[node] != v:
-            visit_edge(node, v)
+            if cycles != None:
+                visit_edge(node, v, cycles, father)
     
     t[0] += 1
     TT[node] = t[0]
 
-def DFS(graph):
+def DFS(graph, cycles=None):
     t = [0]
     TD = []
     TT = []
@@ -44,28 +51,79 @@ def DFS(graph):
     
     for i in range(len(graph)):
         if TD[i] == 0:
-            DFS_(graph, i, TD, TT, father, t)
-    
+            DFS_(graph, i, TD, TT, father, t, cycles)
+
     return father, TD, TT
 
 def random_graph_generator(v):
     graph = nx.random_tree(v)
 
-    number_edges = random.randint(0, v * (v - 1) // 2 - v * 0.3)
+    number_edges = random.randint(0, v * (v - 1) // 2 - v * 0.1)
 
     for _ in range(number_edges):
-        # Choose a random edge from the existing graph
         edge = random.choice(list(graph.edges()))
         
-        # Choose a random node not in the current edge
         new_node = random.choice([node for node in range(v) if node not in edge])
         
-        # Add the new edge to the graph
         graph.add_edge(edge[0], new_node)
 
-    # Return the adjacency list representation of the graph
-    return [node for node, edges in enumerate(graph)]
+    graph = nx.to_dict_of_lists(graph)
+    return [graph[i] for i in range(len(graph))]
 
+def filter_subsets(list_of_lists):
+    result = []
+
+    while list_of_lists:
+        sub = list_of_lists.pop(0)
+
+        isSub = False
+        for l in list_of_lists:
+            if set(sub).issubset(set(l)):
+                isSub = True
+                break
+        
+        for r in result:
+            if set(sub).issubset(set(r)):
+                isSub = True
+                break
+
+        if not isSub:
+            result.append(sub)
+    return result
+
+def miss_edges(graph, cycles):
+    for vertex, neighbors in enumerate(graph):
+        for neighbor in neighbors:
+            found = False
+            for cycle in cycles:
+                if vertex in cycle and neighbor in cycle:
+                    found = True
+                    break
+            if not found:
+                cycles.append([vertex, neighbor])
+
+
+def join_cycles(list_cycles):
+    result = []
+    while list_cycles:
+        cycle = list_cycles.pop(0)
+
+        flag = False
+        positions = []
+        for idx, other_cycle in enumerate(list_cycles):
+            common_elements = set(cycle).intersection(other_cycle)
+            if len(common_elements) >= 2:
+                flag = True
+                cycle = list(set(cycle + other_cycle))
+                positions.append(idx)
+
+        if flag:
+            new_list = [list_cycles[i] for i in range(len(list_cycles)) if i not in positions]
+            list_cycles = new_list + [cycle]
+        else:
+            result.append(cycle)
+    
+    return result   
 
 def createRandomGraph(v):
     graph = [[] for _ in range(v)]
@@ -98,59 +156,15 @@ def createRandomGraph(v):
 
     return graph 
 
-def filter_subsets(list_of_lists):
-    result = []
-
-    while list_of_lists:
-        sub = list_of_lists.pop(0)
-
-        isSub = False
-        for l in list_of_lists:
-            if set(sub).issubset(set(l)):
-                isSub = True
-                break
-        
-        for r in result:
-            if set(sub).issubset(set(r)):
-                isSub = True
-                break
-
-        if not isSub:
-            result.append(sub)
-    return result
-
-def dfs(graph, start, node, visited, path, cycles):
-    visited[node] = True
-    path.append(node)
-    
-    for neighbor in graph[node]:
-        if neighbor == start:
-            cycle = sorted(path)
-
-            if cycle not in cycles:
-                cycles.append(cycle)
-        elif not visited[neighbor]:
-            dfs(graph, start, neighbor, visited, path, cycles)
-    
-    path.pop()
-    visited[node] = False
-
-def find_cycles(graph):
+def method_one(graph):
     cycles = []
-    for node in range(len(graph)):
-        visited = [False for node in graph]
-        dfs(graph, node, node, visited, [], cycles)
-    
-    cycles = filter_subsets(cycles)
-    
+    TD, TT, father = DFS(graph, cycles)
+    # cycles = join_cycles(cycles)
+    # miss_edges(graph, cycles)
     return cycles
-
 if __name__ == '__main__':
     v = 50
-    graph = random_graph_generator(v)
-    print(graph)
-    
-    # print(find_cycles(graph))
-
-
+    graph = createRandomGraph(v)
+    # graph = testGraph()
+    print(method_one(graph))
     
