@@ -277,14 +277,14 @@ if __name__ == '__main__':
     #initializing_depth_first_search(graph)
 
     
-    #finding_articulations_in_graph(graph)  
 
-    print(f'Graph is biconnected or not?\n {determine_if_graph_is_biconnected(graph)}\n')
-    print(f'List of discovery time of each vertex:\n {list_of_discovery_time}\n')
-    print(f'List of end time of each vertex:\n{list_of_end_time}\n')
-    print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
-    print(f'List of lowest pre order number:\n{lowest_preorder_number}\n')
+    # print(f'Graph is biconnected or not?\n {determine_if_graph_is_biconnected(graph)}\n')
+    # print(f'List of discovery time of each vertex:\n {list_of_discovery_time}\n')
+    # print(f'List of end time of each vertex:\n{list_of_end_time}\n')
+    # print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
+    # print(f'List of lowest pre order number:\n{lowest_preorder_number}\n')
     
-    # for a in graph:
-    #     if len(a) == 0:
-    #         print("Grafo desconexo")
+    articulations,original_number_of_components,components_after_removal = finding_articulations(graph)
+    print(f'{articulations}\n')
+    print(f'{original_number_of_components}\n')
+    print(f'{components_after_removal}\n')
