@@ -10,6 +10,29 @@ time = 0
 time_of_death = 0
 
 
+def find_matching_positions(vector):
+    
+    """ 
+        Find matching position in a vector. 
+        The purpose is find if has more than one root in the depth first search 
+        
+        Parameters: 
+            vector: represent the vector of father of each vertex
+        
+        Return:
+            Return the roots of the forest
+    """
+
+    matching_positions = []
+
+    # Iterate through the vector using enumerate to get both index and value
+    for index, value in enumerate(vector):
+        if value == index:
+            matching_positions.append(index)
+
+    return matching_positions
+            
+            
 def initializing_depth_first_search(graph:list[list[int]]) -> None:
     ''' 
         This function has a purpose to find initializing the depth first search
