@@ -118,24 +118,31 @@ def createRandomGraph(v):
 
     
 if __name__ == '__main__':
-    NUMBER_OF_VERTEX = 7
-    graph = createRandomGraph(NUMBER_OF_VERTEX)
-    time = 0
-    time_of_death = 0
-    ## for all vertex inside the graph discovery time and finish time is 0
-    list_of_discovery_time = [[] for _ in range(NUMBER_OF_VERTEX)]
-    list_of_fathers = [[] for _ in range(NUMBER_OF_VERTEX)]
-    list_of_end_time = [[] for _ in range(NUMBER_OF_VERTEX)]
-    lowest_preorder_number = [[] for _ in range(NUMBER_OF_VERTEX)]
 
-    discovery,end,fathers = initializing_depth_first_search(graph,list_of_discovery_time,list_of_end_time,
-                                                            list_of_fathers,time,time_of_death)
-    print(f'List of discovery time of each vertex:\n {discovery}\n')
-    print(f'List of end time of each vertex:\n{end}\n')
-    print(f'List of fathers of each vertex:\n{fathers}\n')
+    #graph = createRandomGraph(NUMBER_OF_VERTEX)
+    graph= [[1],[0, 2, 6],[1, 3, 6],[2, 4, 5],[3, 5],[3, 4],[1, 2]]
+    #resposta
+    #      v   0  1  2  3  4  5  6
+    # pre[v]   0  1  2  3  4  5  6
+    # post[v]  6  5  4  2  1  0  3
+    # lo[v]    0  1  1  2  3  3  1
+    # ebc[v]   2  1  1  0  0  0  1
     
-    articulations = finding_articulations_in_graph(graph,end,discovery,fathers,lowest_preorder_number)
-    print(articulations)
+    #graph=[[2, 3],[8],[0, 3, 8],[0, 2, 8],[7, 9, 10],[6, 9],[5, 9],[4, 10],[1, 2, 3, 10],[4, 5, 6],[4, 7, 8]]
+        
+        #resposta    
+        #  v      a  b  c  d  e  f  g   h  i  j  k
+        # pre[v]  0  4  1  2  6  9  10  7  3  8  5
+        # post[v] 10 0  9  8  5  3  2   1  7  4  6
+        # lo[v]   0  4  0  0  5  8  8   5  1  8  5
+        
+    initializing_depth_first_search(graph)
+    print(f'List of discovery time of each vertex:\n {list_of_discovery_time}\n')
+    print(f'List of end time of each vertex:\n{list_of_end_time}\n')
+    #print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
+    
+    finding_articulations_in_graph(graph)  
+    print(f'List of lowest pre order number:\n{lowest_preorder_number}\n')
     
     
     
