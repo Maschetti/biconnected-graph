@@ -33,6 +33,28 @@ def find_matching_positions(vector):
     return matching_positions
             
             
+def remove_vertex_and_return_new_graph(graph: list[list[int]],vertex:int) -> list[list[int]]:
+    """ 
+        Create a new graph by removing a vertex and its incident edges
+        
+        Parameters: 
+            graph: the original grap
+            vertex: the vertex to be removed
+        
+        Return:
+            The new graph after removal
+    """
+    
+    
+    new_graph = [neighbors[:] for neighbors in graph]
+    new_graph[vertex] = []  
+    
+    for neighbor in graph[vertex]:
+        new_graph[neighbor].remove(vertex)
+    
+    return new_graph
+
+
 def initializing_depth_first_search(graph:list[list[int]]) -> None:
     ''' 
         This function has a purpose to find initializing the depth first search
