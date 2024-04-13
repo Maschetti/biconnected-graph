@@ -94,6 +94,34 @@ def number_of_connected_components(graph:list[list[int]]) -> int:
             
 
 
+def finding_articulations(graph: list[list[int]]) -> Tuple[list[int],int,list[int]]:
+    """ 
+        Make a depth_first_search in a graph and capture the vector of fathers
+        
+        Parameters: 
+            graph: the graph to perform the search
+            start: the root of the search
+        
+        Return:
+            The number of connected components
+    """        
+    original_number_of_components = number_of_connected_components(graph)
+    articulations = []
+    number_of_components_after_removal_articulation = []
+    
+    for vertex in range(len(graph)):
+        
+        new_graph = remove_vertex_and_return_new_graph(graph,vertex)
+         
+
+        new_number_of_components = number_of_connected_components(new_graph)
+        
+        if(original_number_of_components!=new_number_of_components):
+            articulations.append(vertex)
+            number_of_components_after_removal_articulation.append(new_number_of_components)
+    
+    return articulations,original_number_of_components,number_of_components_after_removal_articulation
+
 def initializing_depth_first_search(graph:list[list[int]]) -> None:
     ''' 
         This function has a purpose to find initializing the depth first search
