@@ -1,14 +1,7 @@
 import random
+import networkx as nx
+import time
 from typing import Tuple
-
-NUMBER_OF_VERTEX = 11
-list_of_discovery_time = [[] for _ in range(NUMBER_OF_VERTEX)]
-list_of_fathers = [[] for _ in range(NUMBER_OF_VERTEX)]
-list_of_end_time = [[] for _ in range(NUMBER_OF_VERTEX)]
-lowest_preorder_number = [[] for _ in range(NUMBER_OF_VERTEX)]
-connected_components = [[] for _ in range(NUMBER_OF_VERTEX)]
-time = 0
-time_of_death = 0
 
 
 def find_matching_positions(vector):
@@ -113,7 +106,6 @@ def finding_articulations(graph: list[list[int]]) -> Tuple[list[int],int,list[in
     for vertex in range(len(graph)):
         
         new_graph = remove_vertex_and_return_new_graph(graph,vertex)
-         
 
         new_number_of_components = number_of_connected_components(new_graph)
         
@@ -123,7 +115,7 @@ def finding_articulations(graph: list[list[int]]) -> Tuple[list[int],int,list[in
     
     return articulations,original_number_of_components,number_of_components_after_removal_articulation
 
-def initializing_depth_first_search(graph:list[list[int]]) -> None:
+def initializing_depth_first_search(graph:list[list[int]]) -> Tuple[list[int],list[int],list[int]]:
     ''' 
         This function has a purpose to find initializing the depth first search
         in a graph
@@ -132,15 +124,27 @@ def initializing_depth_first_search(graph:list[list[int]]) -> None:
             graph = This parameter is a list that contain each adjacency list of each
             vertex in a graph. 
     '''
+    list_of_discovery_time = [[] for _ in range(len(graph))]
+    list_of_fathers = [[] for _ in range(len(graph))]
+    list_of_end_time = [[] for _ in range(len(graph))]
+    time2 = 0
+    time_of_death = 0
+    
+
     for vertex in range(len(graph)):
         list_of_discovery_time[vertex]=-1
     for vertex in range(len(graph)):
         if list_of_discovery_time[vertex] == -1:
             list_of_fathers[vertex] = vertex
-            depth_first_search(graph,vertex)
+            depth_first_search(graph,vertex,list_of_discovery_time,list_of_fathers,
+                                list_of_end_time,time2,time_of_death)
+    
+    return list_of_discovery_time,list_of_fathers,list_of_end_time 
         
 
-def depth_first_search(graph: list[list[int]],vertex:int) -> None:
+def depth_first_search(graph: list[list[int]],vertex:int,list_of_discovery_time:list[int],
+                       list_of_fathers:list[int],list_of_end_time:list[int],time2:int,
+                       time_of_death:int) -> None:
     ''' 
         Performing the depth first search in graph building the 
         vectors of pre order, post order and fathers.
@@ -150,15 +154,15 @@ def depth_first_search(graph: list[list[int]],vertex:int) -> None:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
     '''   
-    global time,time_of_death
     
-    list_of_discovery_time[vertex] = time
-    time+=1
+    list_of_discovery_time[vertex] = time2
+    time2+=1
     
     for adjacent in graph[vertex]:
         if list_of_discovery_time[adjacent]==-1:
                 list_of_fathers[adjacent] = vertex
-                depth_first_search(graph,adjacent)
+                depth_first_search(graph,adjacent,list_of_discovery_time,list_of_fathers,
+                                   list_of_end_time,time2,time_of_death)
     
     list_of_end_time[vertex] = time_of_death
     time_of_death+=1
@@ -178,17 +182,20 @@ def min_between_two_values(value1:int,value2:int)->int:
     return value1 if value1<value2 else value2
 
 
-def finding_articulations_in_graph(graph:list[list[int]]) -> None:
+def finding_articulations_in_graph(graph:list[list[int]]) -> Tuple[list[int],list[int],list[int],list[int]]:
     ''' 
         This function has a purpose to find bridges in a Graph
 
         Parameters:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
-    '''    
-    initializing_depth_first_search(graph)
+    '''
+    
+    list_of_discovery_time,list_of_fathers,list_of_end_time = initializing_depth_first_search(graph)
+    
+    lowest_preorder_number = [0 for _ in range(len(graph))]
 
-    list_of_the_first_to_die =  [[] for _ in range(len(graph))]
+    list_of_the_first_to_die =  [0 for _ in range(len(graph))]
     
     for vertex in range(len(graph)):
         list_of_the_first_to_die[list_of_end_time[vertex]] = vertex
@@ -208,8 +215,9 @@ def finding_articulations_in_graph(graph:list[list[int]]) -> None:
                     lowest_preorder_number[vertex_that_died_firts] = min_between_two_values(lowest_preorder_number[adjacent],
                         lowest_preorder_number[vertex_that_died_firts])
     
+    return lowest_preorder_number,list_of_discovery_time,list_of_fathers,list_of_end_time
     
-def determine_if_graph_is_biconnected(graph:list[list[int]]) -> bool:
+def tarjan_method(graph:list[list[int]]) -> bool:
     
     ''' 
         This function has a purpose to determine if a graph is edge biconnected or not using Tarjan's Algorithm
@@ -218,7 +226,7 @@ def determine_if_graph_is_biconnected(graph:list[list[int]]) -> bool:
             graph : This parameter is a list that contain each adjacency list 
             of each vertex in a graph.
     '''    
-    finding_articulations_in_graph(graph)
+    lowest_preorder_number,list_of_discovery_time,list_of_fathers,list_of_end_time = finding_articulations_in_graph(graph)
     
     for vertex in range(len(graph)):
         if ((lowest_preorder_number[vertex]==list_of_discovery_time[vertex])
@@ -253,9 +261,23 @@ def createRandomGraph(v):
     
     return graph 
 
+def random_graph_generator(v):
+    graph = nx.random_tree(v)
+
+    number_edges = random.randint(0, v * (v - 1) // 2 - v * 0.1)
+
+    for _ in range(number_edges):
+        edge = random.choice(list(graph.edges()))
+        
+        new_node = random.choice([node for node in range(v) if node not in edge])
+        
+        graph.add_edge(edge[0], new_node)
+
+    graph = nx.to_dict_of_lists(graph)
+    return [graph[i] for i in range(len(graph))]
 
 
-    
+
 if __name__ == '__main__':
 
     #graph = createRandomGraph(NUMBER_OF_VERTEX)
@@ -267,7 +289,7 @@ if __name__ == '__main__':
     # lo[v]    0  1  1  2  3  3  1
     # ebc[v]   2  1  1  0  0  0  1
     
-    graph=[[2, 3],[8],[0, 3, 8],[0, 2, 8],[7, 9, 10],[6, 9],[5, 9],[4, 10],[1, 2, 3, 10],[4, 5, 6],[4, 7, 8]]
+    #graph=[[2, 3],[8],[0, 3, 8],[0, 2, 8],[7, 9, 10],[6, 9],[5, 9],[4, 10],[1, 2, 3, 10],[4, 5, 6],[4, 7, 8]]
         
         #resposta    
         #  v      a  b  c  d  e  f  g   h  i  j  k
@@ -276,16 +298,35 @@ if __name__ == '__main__':
         # lo[v]   0  4  0  0  5  8  8   5  1  8  5
         
     #initializing_depth_first_search(graph)
-
     
 
-    # print(f'Graph is biconnected or not?\n {determine_if_graph_is_biconnected(graph)}\n')
-    # print(f'List of discovery time of each vertex:\n {list_of_discovery_time}\n')
-    # print(f'List of end time of each vertex:\n{list_of_end_time}\n')
-    # print(f'List of fathers of each vertex:\n{list_of_fathers}\n')
-    # print(f'List of lowest pre order number:\n{lowest_preorder_number}\n')
     
-    articulations,original_number_of_components,components_after_removal = finding_articulations(graph)
-    print(f'{articulations}\n')
-    print(f'{original_number_of_components}\n')
-    print(f'{components_after_removal}\n')
+    file_path = "result_of_tarjan.txt"
+    runtime=0
+
+    with open(file_path, 'w') as file:
+        number_of_vertex_to_generate = [100,1000,10000,100000]
+        for number in number_of_vertex_to_generate:
+            for estimation in range(50):
+                
+                graph = random_graph_generator(number)
+                
+                start_time = time.time()        
+                result = tarjan_method(graph)     
+                end_time = time.time()
+                
+                runtime += end_time - start_time
+                
+                line1 = f'Graph is biconnected or not?{result}\n'
+                file.write(line1)
+
+            file.write(f'The avarage time to run the tarjan method for {number} vertex is : {runtime/number}\n\n')
+
+
+    
+    
+
+    # articulations,original_number_of_components,components_after_removal = finding_articulations(graph)
+    # print(f'{articulations}\n')
+    # print(f'{original_number_of_components}\n')
+    # print(f'{components_after_removal}\n')
