@@ -265,7 +265,6 @@ def random_graph_generator(v):
 
 if __name__ == '__main__':
 
-    #graph = createRandomGraph(NUMBER_OF_VERTEX)
     #graph= [[1],[0, 2, 6],[1, 3, 6],[2, 4, 5],[3, 5],[3, 4],[1, 2]]
     #resposta
     #      v   0  1  2  3  4  5  6
@@ -275,9 +274,6 @@ if __name__ == '__main__':
     # ebc[v]   2  1  1  0  0  0  1
     
     #graph=[[2, 3],[8],[0, 3, 8],[0, 2, 8],[7, 9, 10],[6, 9],[5, 9],[4, 10],[1, 2, 3, 10],[4, 5, 6],[4, 7, 8]]
-
-    #result = tarjan_method(graph)    
-    #print(result)
         #resposta    
         #  v      a  b  c  d  e  f  g   h  i  j  k
         # pre[v]  0  4  1  2  6  9  10  7  3  8  5
@@ -309,11 +305,26 @@ if __name__ == '__main__':
 
             file.write(f'The avarage time, to {interactions} interaction, running the tarjan method for {number} vertex is : {runtime/interactions}\n\n')
 
+    file_path = "result_of_articulations.txt"
+    runtime=0
+    interactions = 50
+    with open(file_path, 'w') as file:
+        number_of_vertex_to_generate = [100,1000]
+        for number in number_of_vertex_to_generate:
+            for estimation in range(interactions):
+                
+                graph = random_graph_generator(number)
+                
+                start_time = time.time()        
+                articulations, components_in_the_original, components_after_removal = finding_articulations(graph)     
+                end_time = time.time()
+                
+                result2 = end_time - start_time
+                runtime += result2
+                line1 = f'Components in the original graph: {components_in_the_original}\nComponents after the removal of the graph: {components_after_removal}\nArticulations:\n{articulations}'
+                file.write(line1)
 
+
+            file.write(f'The avarage time, to {interactions} interaction, running the finding articulations method for {number} vertex is : {runtime/interactions}\n\n')
     
     
-
-    # articulations,original_number_of_components,components_after_removal = finding_articulations(graph)
-    # print(f'{articulations}\n')
-    # print(f'{original_number_of_components}\n')
-    # print(f'{components_after_removal}\n')
